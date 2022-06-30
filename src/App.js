@@ -1,34 +1,43 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
-function App(){
- const[loading, setLoading] = useState(true);
- const [movies, setMovies] = useState([]);
- const getMovies = async() => {
-    const reponse = await fetch(
-  `https://yts.mx/api/v2/list_movies.json?minimum_rating=8.8&sort_by=year`
-  );
-    const json = await reponse.json();
-    setMovies(json.data.movies);
-    setLoading(false);
- }
- useEffect(() => {
-    getMovies()
-  },[]);
- return <div>{loading ? <h1>loading...</h1> : movies.map(movie => 
-  
-  <div key={movie.id}>
-  <img src={movie.medium_cover_image}/>
-   <h2>{movie.title}</h2>
-   <p>{movie.summary}</p>
-   <ul>
-    {movie.genres.map((g) => (
-      <li key={g}>{g}</li>
-    ))}
-   </ul>
-  </div>)}
-  
-  </div>;
+function App() {
+  const [toDo, setToDo] = useState("");
+  const [toDos, setToDos] = useState([]);
+  constonChange = (event) => setToDo(event.target.value);
+  constonSubmit = (event) => {
+    event.preventDefault();
+    if (toDo === "") {
+      return;
+    }
 
+    //toDos.push() 못씀. State 직접적으로 수정 못함. 안함! 수정하는 함수를 쓸 것.
+    setToDos((currentArray) => [toDo, ...currentArray]);
+    setToDo("");
+  };
+
+
+  return (
+    <div>
+      <h1>My To Dos ({toDos.length})</h1>
+      <form onSubmit={onSubmit}>
+        <input
+          onChange={onChange}
+          value={toDo}
+          type="text"
+          placeholder="Write your to do..."
+        />
+
+        <button>Add To Do</button>
+      </form>
+      <hr />
+      <ul>
+        {toDos.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
+    </div>
+
+  )
 }
-
 export default App;
+
